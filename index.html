@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雪夜祝福</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', 'PingFang SC', sans-serif;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            background: linear-gradient(135deg, #0c0c2e 0%, #1a1a3e 25%, #2d2d5a 50%, #1a1a3e 75%, #0c0c2e 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* 星星背景 */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* 山脉背景 */
+        .mountains {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            z-index: 2;
+            overflow: hidden;
+        }
+        
+        .mountain {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 200px solid #1a1a33;
+        }
+        
+        .mountain:nth-child(1) {
+            left: 5%;
+            border-bottom-color: #222244;
+            transform: scale(1.2);
+        }
+        
+        .mountain:nth-child(2) {
+            left: 30%;
+            border-bottom-color: #1c1c3a;
+            transform: scale(0.9);
+        }
+        
+        .mountain:nth-child(3) {
+            right: 20%;
+            border-bottom-color: #222244;
+            transform: scale(1.1);
+        }
+        
+        .mountain:nth-child(4) {
+            right: 5%;
+            border-bottom-color: #1c1c3a;
+            transform: scale(0.8);
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .message {
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            transition: opacity 0.8s ease;
+            max-width: 90%;
+        }
+        
+        .message h1 {
+            font-size: 5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+            letter-spacing: 5px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .message-1 h1 {
+            color: #4da6ff;
+            animation: glow 2s infinite alternate, float 3s ease-in-out infinite;
+        }
+        
+        .message-2 h1 {
+            color: #99e6ff;
+            font-size: 3.5rem;
+            animation: float 3s ease-in-out infinite 0.5s;
+        }
+        
+        .message-3 h1 {
+            color: #ffd700;
+            font-size: 4rem;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: sparkle 3s infinite alternate, float 3s ease-in-out infinite 1s;
+        }
+        
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        #snowCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+        
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 10px rgba(77, 166, 255, 0.7);
+                box-shadow: 0 10px 30px rgba(77, 166, 255, 0.2);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(77, 166, 255, 0.9), 0 0 30px rgba(77, 166, 255, 0.5);
+                box-shadow: 0 10px 30px rgba(77, 166, 255, 0.4);
+            }
+        }
+        
+        @keyframes sparkle {
+            0% {
+                filter: brightness(1);
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                filter: brightness(1.2);
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(-50%, -50%);
+            }
+            50% {
+                transform: translate(-50%, -53%);
+            }
+        }
+        
+        .snow-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            z-index: 25;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 底部装饰 */
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background: linear-gradient(to top, #1a1a33, #2a2a55);
+            z-index: 3;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .message h1 {
+                font-size: 3rem;
+                padding: 15px;
+            }
+            
+            .message-2 h1 {
+                font-size: 2.5rem;
+            }
+            
+            .message-3 h1 {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .message h1 {
+                font-size: 2.2rem;
+                letter-spacing: 3px;
+                padding: 12px;
+            }
+            
+            .message-2 h1 {
+                font-size: 1.8rem;
+            }
+            
+            .message-3 h1 {
+                font-size: 2rem;
+            }
+            
+            .snow-info {
+                font-size: 0.8rem;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- 山脉 -->
+    <div class="mountains">
+        <div class="mountain"></div>
+        <div class="mountain"></div>
+        <div class="mountain"></div>
+        <div class="mountain"></div>
+    </div>
+    
+    <!-- 地面 -->
+    <div class="ground"></div>
+    
+    <div class="container">
+        <!-- 第一段文字 -->
+        <div class="message message-1 visible" id="message1">
+            <h1>位杰你好！</h1>
+        </div>
+        
+        <!-- 第二段文字 -->
+        <div class="message message-2 hidden" id="message2">
+            <h1>外面在下雪，我也请你看雪。</h1>
+        </div>
+        
+        <!-- 第三段文字 -->
+        <div class="message message-3 hidden" id="message3">
+            <h1>瑞雪兆丰年，位总今年发大财。</h1>
+        </div>
+        
+        <!-- 雪花画布 -->
+        <canvas id="snowCanvas"></canvas>
+        
+        <!-- 提示信息 -->
+        <div class="snow-info">❄️ 雪景持续3秒...</div>
+    </div>
+
+    <script>
+        // 创建星空
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150; // 星星数量
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 随机大小 (1-3px)
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机闪烁延迟
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                // 随机闪烁持续时间
+                star.style.animationDuration = `${Math.random() * 3 + 3}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // 获取DOM元素
+        const message1 = document.getElementById('message1');
+        const message2 = document.getElementById('message2');
+        const message3 = document.getElementById('message3');
+        const canvas = document.getElementById('snowCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 设置canvas尺寸为全屏
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        // 初始调整canvas尺寸
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // 文字显示时序控制
+        setTimeout(() => {
+            // 1秒后，第一段文字消失，显示第二段文字
+            message1.classList.remove('visible');
+            message1.classList.add('hidden');
+            
+            setTimeout(() => {
+                message2.classList.remove('hidden');
+                message2.classList.add('visible');
+            }, 800);
+            
+            // 再等1秒后，第二段文字消失，开始下雪
+            setTimeout(() => {
+                message2.classList.remove('visible');
+                message2.classList.add('hidden');
+                
+                // 开始下雪动画
+                startSnow();
+                
+                // 3秒后显示第三段文字
+                setTimeout(() => {
+                    message3.classList.remove('hidden');
+                    message3.classList.add('visible');
+                }, 3000);
+                
+            }, 1800);
+        }, 1000);
+        
+        // 雪花相关变量
+        let snowflakes = [];
+        let animationId;
+        
+        // 雪花类
+        class Snowflake {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.size = Math.random() * 4 + 2;
+                this.speed = Math.random() * 1 + 0.5;
+                this.wind = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.5;
+                this.wobble = Math.random() * 0.5;
+                this.wobbleSpeed = Math.random() * 0.05;
+                this.wobblePos = 0;
+                // 添加雪花类型：普通雪花或发光雪花
+                this.type = Math.random() > 0.8 ? 'glowing' : 'normal';
+            }
+            
+            update() {
+                this.y += this.speed;
+                this.x += this.wind + Math.sin(this.wobblePos) * this.wobble;
+                this.wobblePos += this.wobbleSpeed;
+                
+                // 如果雪花落到底部，重置到顶部
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                    // 重置时有一定概率改变类型
+                    this.type = Math.random() > 0.8 ? 'glowing' : 'normal';
+                }
+                
+                // 如果雪花飘出左右边界，重新调整位置
+                if (this.x > canvas.width + 10) {
+                    this.x = -10;
+                } else if (this.x < -10) {
+                    this.x = canvas.width + 10;
+                }
+            }
+            
+            draw() {
+                ctx.beginPath();
+                
+                // 绘制雪花主体
+                if (this.type === 'glowing') {
+                    // 发光雪花
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.fill();
+                    
+                    // 添加光晕效果
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y, this.size,
+                        this.x, this.y, this.size * 2
+                    );
+                    gradient.addColorStop(0, `rgba(200, 220, 255, ${this.opacity * 0.8})`);
+                    gradient.addColorStop(1, `rgba(200, 220, 255, 0)`);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                } else {
+                    // 普通雪花
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.fill();
+                    
+                    // 轻微光晕
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 1.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(200, 220, 255, ${this.opacity * 0.2})`;
+                    ctx.fill();
+                }
+            }
+        }
+        
+        // 创建雪花
+        function createSnowflakes(count) {
+            for (let i = 0; i < count; i++) {
+                snowflakes.push(new Snowflake());
+            }
+        }
+        
+        // 开始下雪
+        function startSnow() {
+            // 清除现有雪花
+            snowflakes = [];
+            
+            // 根据屏幕大小创建适当数量的雪花
+            const flakeCount = Math.min(250, Math.floor((canvas.width * canvas.height) / 2500));
+            createSnowflakes(flakeCount);
+            
+            // 开始动画循环
+            animateSnow();
+        }
+        
+        // 绘制背景
+        function drawBackground() {
+            // 清除画布，使用半透明黑色以实现尾迹效果
+            ctx.fillStyle = 'rgba(12, 12, 46, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // 雪花动画循环
+        function animateSnow() {
+            drawBackground();
+            
+            // 更新和绘制所有雪花
+            for (let flake of snowflakes) {
+                flake.update();
+                flake.draw();
+            }
+            
+            // 继续动画
+            animationId = requestAnimationFrame(animateSnow);
+        }
+        
+        // 页面加载完成后初始化
+        window.addEventListener('load', () => {
+            // 创建星空
+            createStars();
+            
+            // 预创建一些雪花，但不会立即显示
+            createSnowflakes(50);
+        });
+        
+        // 防止页面滚动
+        document.body.addEventListener('wheel', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // 触摸设备防止滚动
+        document.body.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+</html>
